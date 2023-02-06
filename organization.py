@@ -1,8 +1,9 @@
+import os
 from dashboard import Dashboard
 from network import Network
 from utils import os_utils, blob_storage
 
-API_KEY = '3e3110d2adff78d875beefb6a6e7d631db296004'
+API_KEY = os.environ['API_KEY']
 
 class Organization:
     def __init__(self, organization_id=None):
