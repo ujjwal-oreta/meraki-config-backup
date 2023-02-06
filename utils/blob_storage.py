@@ -4,9 +4,11 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
 
 def get_blob_client():
-    account_url = "https://merakiconfigbackupappore.blob.core.windows.net"
-    default_credential = DefaultAzureCredential()
-    blob_service_client = BlobServiceClient(account_url, credential=default_credential)
+    # account_url = "https://merakiconfigbackupappore.blob.core.windows.net"
+    # default_credential = DefaultAzureCredential()
+    connection_str = 'DefaultEndpointsProtocol=https;AccountName=merakiconfigbackupappore;AccountKey=iSvnhKIYsIZQTByVBAqQ3nSqAdGJyXle8+wX+2nh5iAZxMT6hL+R96uMyEvRARCbp16gFCaO1Ac4+AStk+OwMQ==;EndpointSuffix=core.windows.net'
+    # blob_service_client = BlobServiceClient(account_url, credential=default_credential)
+    blob_service_client = BlobServiceClient.from_connection_string(connection_str)
     return blob_service_client
 
 
