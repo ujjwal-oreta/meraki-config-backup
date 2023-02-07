@@ -180,6 +180,6 @@ def store_all_configurations(config, organization_ids, is_cloud):
 
 def get_all_organization_ids():
     dashboard = Dashboard(API_KEY)
-    organizations = dashboard.organizations.getOrganizations()
+    organizations = dashboard.dashboard.organizations.getOrganizations()
     org_ids_list = [x['id'] for x in organizations]
     return org_ids_list

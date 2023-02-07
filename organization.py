@@ -1,7 +1,7 @@
 import os
 from dashboard import Dashboard
 from network import Network
-from utils import os_utils, blob_storage
+from utils import os_utils, blob_storage, decorator
 
 API_KEY = os.environ['API_KEY']
 
@@ -14,7 +14,8 @@ class Organization:
         self.organization_networks = None
         self.organization_devices = None
         self.network_clients = None
-        self.organization_devices_serial_list = None
+        self.organization_devices_serial_list = []
+        self.organization_network_ids = []
     
     def getOrganization(self):
         return self.organization.getOrganization(organizationId = self.organization_id)
@@ -39,55 +40,50 @@ class Organization:
             # blob_storage.create_container(blob_client, self.organization_dir_name)
         return self.organization_dir_name, base_dir_name 
     
+    @decorator.exception_decorator
     def getOrganizationActionBatches(self):
         return self.organization.getOrganizationActionBatches(organizationId=self.organization_id)
 
+    @decorator.exception_decorator
     def getOrganizationAdaptivePolicyAcls(self):
         return self.organization.getOrganizationAdaptivePolicyAcls(organizationId=self.organization_id)
     
+    @decorator.exception_decorator
     def getOrganizationAdaptivePolicyGroups(self):
         return self.organization.getOrganizationAdaptivePolicyGroups(organizationId=self.organization_id)
     
+    @decorator.exception_decorator
     def getOrganizationAdmins(self):
         self.organization.getOrganizationAdmins(organizationId=self.organization_id)
     
+    @decorator.exception_decorator
     def getOrganizationAlertsProfiles(self):
         return self.organization.getOrganizationAlertsProfiles(organizationId=self.organization_id)
     
+    @decorator.exception_decorator
     def getOrganizationNetworks(self):
         self.organization_networks = self.organization.getOrganizationNetworks(organizationId=self.organization_id)
         self.organization_network_ids = [network['id'] for network in self.organization_networks]
         return self.organization_networks
     
+    @decorator.exception_decorator
     def getOrganizationBrandingPolicies(self):
         config = {}
-        try:
-            config = self.organization.getOrganizationBrandingPolicies(organizationId=self.organization_id)
-        except Exception as e:
-            if e.status == 400:
-                print('This organization {} does not support Dashboard branding'.format(self.organization_id))
-                return 'This organization {} does not support Dashboard branding'.format(self.organization_id)
-            else:
-                raise(e)
+        config = self.organization.getOrganizationBrandingPolicies(organizationId=self.organization_id)
         return config
     
+    @decorator.exception_decorator
     def getOrganizationBrandingPoliciesPriorities(self):
-        try:
-            return self.organization.getOrganizationBrandingPoliciesPriorities(organizationId=self.organization_id)
-        except Exception as e:
-            if e.status == 400:
-                print('This organization {} does not support Dashboard branding'.format(self.organization_id))
-                return 'This organization {} does not support Dashboard branding'.format(self.organization_id)
-            else:
-                raise(e)
+        return self.organization.getOrganizationBrandingPoliciesPriorities(organizationId=self.organization_id)
         
     
+    @decorator.exception_decorator
     def getOrganizationDevices(self):
         self.organization_devices = self.organization.getOrganizationDevices(organizationId=self.organization_id)
         self.organization_devices_serial_list = [x['serial'] for x in self.organization_devices]
         return self.organization_devices
 
-
+    @decorator.exception_decorator
     def getOrganizationClients(self):
         config = {}
         if not self.organization_networks:
@@ -98,6 +94,7 @@ class Organization:
         return config
 
 
+    @decorator.exception_decorator
     def getOrganizationNetworkClientPolicy(self):
         config = {}
         for network_id in self.organization_network_ids:
@@ -105,6 +102,7 @@ class Organization:
             config[network_id] = network.getNetworkPoliciesByClient()
         return config
 
+    @decorator.exception_decorator
     def getOrganizationClientsByNetwork(self):
         self.network_clients = {}
         if not self.organization_networks:
@@ -114,7 +112,7 @@ class Organization:
             self.network_clients[network_id] = network.getNetworkClients()
         return self.network_clients
 
-
+    @decorator.exception_decorator
     def fetchMacAddressFromNetworkClients(self):
         mac_address = []
         for key in self.network_clients:
@@ -122,7 +120,7 @@ class Organization:
             mac_address.extend(network_mac_list)
         return mac_address
 
-    
+    @decorator.exception_decorator
     def getOrganizationClientsSearch(self):
         config = {}
         if not self.network_clients:
@@ -133,6 +131,7 @@ class Organization:
         return config
     
 
+    @decorator.exception_decorator
     def getNetworkClientSplashAuthorizationStatus(self):
         config = {}
         if not self.network_clients:
@@ -142,33 +141,37 @@ class Organization:
             config[network_id] = network.getNetworkClientSplashAuthorizationStatus(self.network_clients[network_id])
         return config
     
-
+    @decorator.exception_decorator
     def getOrganizationConfigTemplates(self):
         return self.organization.getOrganizationConfigTemplates(organizationId=self.organization_id)
     
 
+    @decorator.exception_decorator
     def getOrganizationEarlyAccessFeatures(self):
         return self.organization.getOrganizationEarlyAccessFeatures(organizationId=self.organization_id)
 
 
+    @decorator.exception_decorator
     def getOrganizationEarlyAccessFeaturesOptIns(self):
         return self.organization.getOrganizationEarlyAccessFeaturesOptIns(organizationId=self.organization_id)
 
-    
+    @decorator.exception_decorator
     def getOrganizationFirmware(self):
         config = {}
         config['upgrades'] = self.getFirmwareUpgrades()
         config['byDevice'] = self.getOrganizationFirmwareUpgradesByDevice()
     
-
+    @decorator.exception_decorator
     def getFirmwareUpgrades(self):
         return self.organization.getOrganizationFirmwareUpgrades(organizationId=self.organization_id)
     
 
+    @decorator.exception_decorator
     def getOrganizationFirmwareUpgradesByDevice(self):
         return self.organization.getOrganizationFirmwareUpgradesByDevice(organizationId=self.organization_id)
 
 
+    @decorator.exception_decorator
     def getOrganizationFirmwareUpgrades(self):
         if not self.organization_networks:
             self.organization_networks = self.getOrganizationNetworks()
@@ -176,6 +179,7 @@ class Organization:
         config['staged'] = self.getStagedNetworkUpgrades()
         
 
+    @decorator.exception_decorator
     def getNetworkFirmwareUpgrades(self):
         config = {}
         for network_id in self.organization_network_ids:
@@ -184,6 +188,7 @@ class Organization:
         return config
     
 
+    @decorator.exception_decorator
     def getStagedNetworkUpgrades(self):
         config = {}
         config['events'] = self.getFirmwareStagedEvents()
@@ -191,6 +196,8 @@ class Organization:
         config['stages'] = self.getNetworkFirmwareUpgradesStagedStages()
         return config
 
+
+    @decorator.exception_decorator
     def getFirmwareStagedEvents(self):
         config = {}
         if not self.organization_networks:
@@ -201,6 +208,7 @@ class Organization:
         return config
 
 
+    @decorator.exception_decorator
     def getNetworkFirmwareUpgradesStagedGroups(self):
         config = {}
         if not self.organization_networks:
@@ -210,6 +218,8 @@ class Organization:
             config[network_id] = network.getNetworkFirmwareUpgradesStagedGroups()
         return config
     
+
+    @decorator.exception_decorator
     def getNetworkFirmwareUpgradesStagedStages(self):
         config = {}
         if not self.organization_networks:
@@ -219,6 +229,8 @@ class Organization:
             config[network_id] = network.getNetworkFirmwareUpgradesStagedStages()
         return config
 
+
+    @decorator.exception_decorator
     def getOrganizationFloorPlans(self):
         config = {}
         if not self.organization_networks:
@@ -228,6 +240,7 @@ class Organization:
             config[network_id] = network.getNetworkFloorPlans()
         return config
     
+    @decorator.exception_decorator
     def getOrganizationGroupPolicies(self):
         config = {}
         if not self.organization_networks:
@@ -237,7 +250,7 @@ class Organization:
             config[network_id] = network.getNetworkGroupPolicies()
         return config
 
-    
+    @decorator.exception_decorator
     def getOrganizationLicenses(self):
         try:
             return self.organization.getOrganizationLicenses(organizationId=self.organization_id)
@@ -247,32 +260,36 @@ class Organization:
             else:
                 raise(e)
 
+    @decorator.exception_decorator
     def getOrganizationLoginSecurity(self):
         return self.organization.getOrganizationLoginSecurity(organizationId=self.organization_id)
 
+    @decorator.exception_decorator
     def getOrganizationPolicyObjects(self):
         return self.organization.getOrganizationPolicyObjects(organizationId=self.organization_id)
 
+    @decorator.exception_decorator
     def getOrganizationPolicyObjectsGroups(self):
         return self.organization.getOrganizationPolicyObjectsGroups(organizationId=self.organization_id)
 
+    @decorator.exception_decorator
     def getOrganizationSaml(self):
         return self.organization.getOrganizationSaml(organizationId=self.organization_id)
 
+    @decorator.exception_decorator
     def getOrganizationSamlIdps(self):
-        try:
-            return self.organization.getOrganizationSamlIdps(organizationId=self.organization_id)
-        except Exception as e:
-            if e.status == 400:
-                return e.message['error']
-            else:
-                raise(e)
+        return self.organization.getOrganizationSamlIdps(organizationId=self.organization_id)
 
+    @decorator.exception_decorator
     def getOrganizationSamlRoles(self):
         return self.organization.getOrganizationSamlRoles(organizationId=self.organization_id)
 
+
+    @decorator.exception_decorator
     def getOrganizationSnmp(self):
         return self.organization.getOrganizationSnmp(organizationId=self.organization_id)
 
+
+    @decorator.exception_decorator
     def getOrganizationInventoryDevices(self):
         return self.organization.getOrganizationInventoryDevices(organizationId=self.organization_id)
