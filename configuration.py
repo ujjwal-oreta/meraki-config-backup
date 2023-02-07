@@ -1,10 +1,14 @@
 import os
 import json
 
+from dashboard import Dashboard
 from organization import Organization
 from network import Network
 from device import Device
 from utils import os_utils, common_utils, blob_storage
+
+
+API_KEY = os.environ['API_KEY']
 
 
 def get_all_configurations(organization_ids, is_cloud):
@@ -172,3 +176,10 @@ def store_all_configurations(config, organization_ids, is_cloud):
         store_organization_configuration(org_config, organization_dir, is_cloud)
         store_network_configuration(network_config, is_cloud)
         store_device_configuration(device_config, is_cloud)
+
+
+def get_all_organization_ids():
+    dashboard = Dashboard(API_KEY)
+    organizations = dashboard.organizations.getOrganizations()
+    org_ids_list = [x['id'] for x in organizations]
+    return org_ids_list
