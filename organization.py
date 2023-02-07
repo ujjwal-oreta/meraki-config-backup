@@ -21,7 +21,10 @@ class Organization:
         return self.organization.getOrganization(organizationId = self.organization_id)
 
     def getOrganizationName(self):
-        return self.organization.getOrganization(organizationId=self.organization_id)['name']
+        try:
+            return self.organization.getOrganization(organizationId=self.organization_id)['name']
+        except Exception as e:
+            return str(self.organization_id)
     
     def getAllOrganizations(self):
         return self.organization.getOrganizations()
@@ -65,6 +68,7 @@ class Organization:
         self.organization_networks = self.organization.getOrganizationNetworks(organizationId=self.organization_id)
         self.organization_network_ids = [network['id'] for network in self.organization_networks]
         return self.organization_networks
+ 
     
     @decorator.exception_decorator
     def getOrganizationBrandingPolicies(self):

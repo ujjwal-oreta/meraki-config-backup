@@ -2,7 +2,7 @@ import os
 from dashboard import Dashboard
 from utils import os_utils, blob_storage
 
-API_KEY = os.environ['API_KEY']
+API_KEY = '3e3110d2adff78d875beefb6a6e7d631db296004'
 
 class Device():
     def __init__(self, serial=None):

@@ -1,6 +1,6 @@
 import os
 from dashboard import Dashboard
-from utils import os_utils, blob_storage
+from utils import os_utils, blob_storage, decorator
 
 API_KEY = os.environ['API_KEY']
 
@@ -95,18 +95,23 @@ class Network():
     def getNetworkNetflow(self):
         return self.network.getNetworkNetflow(networkId=self.network_id)
 
+    @decorator.exception_decorator
     def getNetworkPiiPiiKeys(self):
         return self.network.getNetworkPiiPiiKeys(networkId=self.network_id)
 
+    @decorator.exception_decorator
     def getNetworkPiiRequests(self):
         return self.network.getNetworkPiiRequests(networkId=self.network_id)
 
+    @decorator.exception_decorator
     def getNetworkPiiSmDevicesForKey(self):
         return self.network.getNetworkPiiSmDevicesForKey(networkId=self.network_id)
 
+    @decorator.exception_decorator
     def getNetworkPiiSmOwnersForKey(self):
         return self.network.getNetworkPiiSmOwnersForKey(networkId=self.network_id)
 
+    @decorator.exception_decorator
     def getNetworkPoliciesByClient(self):
         return self.network.getNetworkPoliciesByClient(networkId=self.network_id)
 
