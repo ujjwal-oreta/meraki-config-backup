@@ -25,4 +25,5 @@ jobs:
       - name: execute py script # run main.py
         env:
           BLOB_CONN_STR: ${{ secrets.BLOB_CONN_STR }}
+          API_KEY: ${{ secrets.API_KEY }}
         run: python main.py
