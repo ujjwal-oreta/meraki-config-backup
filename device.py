@@ -1,6 +1,6 @@
 import os
 from dashboard import Dashboard
-from utils import os_utils, blob_storage
+from utils import os_utils, blob_storage, decorator
 
 API_KEY = '3e3110d2adff78d875beefb6a6e7d631db296004'
 
@@ -33,6 +33,7 @@ class Device():
             else:
                 raise(e)
     
+    @decorator.exception_decorator
     def getDeviceManagementInterface(self):
         return self.devices.getDeviceManagementInterface(serial=self.serial)
         
