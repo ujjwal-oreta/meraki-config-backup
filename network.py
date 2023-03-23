@@ -80,9 +80,11 @@ class Network():
     def getNetworkHealthAlerts(self):
         return self.network.getNetworkHealthAlerts(networkId=self.network_id)
 
+    @decorator.exception_decorator
     def getNetworkMerakiAuthUsers(self):
         return self.network.getNetworkMerakiAuthUsers(networkId=self.network_id)
 
+    @decorator.exception_decorator
     def getNetworkMqttBrokers(self):
         try:
             return self.network.getNetworkMqttBrokers(networkId=self.network_id)
@@ -92,6 +94,7 @@ class Network():
             else:
                 raise(e)
 
+    @decorator.exception_decorator
     def getNetworkNetflow(self):
         return self.network.getNetworkNetflow(networkId=self.network_id)
 
