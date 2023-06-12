@@ -32,7 +32,7 @@ class Organization:
     def getOrganizationDirName(self, base_dir_name):
         org_name = self.getOrganizationName()
         self.organization_dir_name = base_dir_name + '/' + org_name + '/Meraki/' + '/Organization'
-        return self.organization_dir_name, base_dir_name + '/' + org_name + '/Meraki/'
+        return self.organization_dir_name, base_dir_name + '/' + org_name + '/Meraki'
     
     def createOrganizationDir(self, base_dir_name, is_cloud):
         self.organization_dir_name, base_dir_name = self.getOrganizationDirName(base_dir_name)
