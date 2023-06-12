@@ -8,6 +8,7 @@ def get_blob_client():
     # account_url = "https://merakiconfigbackupappore.blob.core.windows.net"
     # default_credential = DefaultAzureCredential()
     connection_str = os.environ['BLOB_CONN_STR']
+    print("BLOB Connection String: {}".format(connection_str))
     # blob_service_client = BlobServiceClient(account_url, credential=default_credential)
     blob_service_client = BlobServiceClient.from_connection_string(connection_str)
     return blob_service_client
