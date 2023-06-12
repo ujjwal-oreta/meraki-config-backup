@@ -183,4 +183,4 @@ def get_all_organization_ids():
     print("API_KEY:{}".format(API_KEY))
     organizations = dashboard.dashboard.organizations.getOrganizations()
     org_ids_list = [x['id'] for x in organizations]
-    return org_ids_list[10]
+    return org_ids_list[:2]
