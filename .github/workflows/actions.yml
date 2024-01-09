@@ -27,3 +27,6 @@ jobs:
           BLOB_CONN_STR: ${{ secrets.BLOB_CONN_STR }}
           API_KEY: ${{ secrets.API_KEY }}
         run: python main.py
+
+      - name: add dummy commits
+        uses: gautamkrishnar/keepalive-workflow@v1 # using the workflow with default settings
